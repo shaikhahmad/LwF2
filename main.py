@@ -1,6 +1,6 @@
 from LwF import LwFmodel
 from ResNet import resnet18_cbam
-parser=10
+parser=4
 numclass= 10 #int(40/parser)
 task_size=int(40/parser)
 feature_extractor=resnet18_cbam()
@@ -33,11 +33,11 @@ normal_transforms = {
 svhn = {x: datasets.SVHN(root='SVHN', split=x if x == 'train' else 'test',
                                         download=True, transform=normal_transforms[x])
          for x in ['train', 'val']}
-# svhn_loader = {x: torch.utils.data.DataLoader(svhn[x], batch_size=batch_size,
-#                                                shuffle=True, num_workers=4)
-#                 for x in ['train', 'val']}
+svhn_loader = {x: torch.utils.data.DataLoader(svhn[x], batch_size=batch_size,
+                                               shuffle=True, num_workers=4)
+                for x in ['train', 'val']}
 
 for i in range(4):
     model.beforeTrain(svhn)
-    accuracy=model.train()
+    accuracy=model.train(svhn_loader)
     model.afterTrain(accuracy)

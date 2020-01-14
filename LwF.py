@@ -54,7 +54,7 @@ class LwFmodel:
     # train model
     # compute loss
     # evaluate model
-    def train(self):
+    def train(self, dataloader):
         accuracy = 0
         opt = optim.SGD(self.model.parameters(), lr=self.learning_rate,momentum=0.9,nesterov=True, weight_decay=0.00001)
         for epoch in range(self.epochs):
@@ -67,15 +67,16 @@ class LwFmodel:
             elif epoch == 85:
                 opt = optim.SGD(self.model.parameters(), lr=self.learning_rate /125,momentum=0.9,nesterov=True, weight_decay=0.00001)
                 print("change learning rate%.5f" % (self.learning_rate / 125))
-            for step, (images, target) in enumerate(tqdm(self.train_loader)):
+            for step, (images, target) in enumerate(tqdm(dataloader['train'])):
                 images, target = images.to(device), target.to(device)
                 opt.zero_grad()
                 loss=self._compute_loss(images,target)
                 opt.zero_grad()
                 loss.backward()
                 opt.step()
+                # if step==2:break
                 # print('epoch:%d,step:%d,loss:%.3f' % (epoch, step, loss.item()))
-            accuracy = self._test(self.test_loader)
+            accuracy = self._test(dataloader['train'])
             print('epoch:%d,accuracy:%.5f' % (epoch, accuracy))
         return accuracy
 
