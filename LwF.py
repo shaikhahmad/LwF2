@@ -82,7 +82,7 @@ class LwFmodel:
     def _test(self, testloader):
         self.model.eval()
         correct, total = 0.0, 0.0
-        for setp, (indexs, imgs, labels) in enumerate(testloader):
+        for setp, (imgs, labels) in enumerate(testloader):
             imgs, labels = imgs.to(device), labels.to(device)
             with torch.no_grad():
                 outputs = self.model(imgs)
