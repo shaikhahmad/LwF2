@@ -31,6 +31,7 @@ class LwFmodel:
     # get incremental train data
     # incremental
     def beforeTrain(self, Dataset):
+        self.model = self.model.to(device)
         self.model.eval()
         self.train_loader,self.test_loader=self._get_train_and_test_dataloader(Dataset)
         if self.numclass>self.task_size:
