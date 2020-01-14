@@ -87,7 +87,7 @@ class LwFmodel:
             with torch.no_grad():
                 outputs = self.model(imgs)
             predicts = torch.max(outputs, dim=1)[1]
-            correct += (predicts.cpu() == labels.cpu()).sum()
+            correct += (predicts == labels).sum()
             total += len(labels)
         accuracy = correct.item() / total
         self.model.train()
