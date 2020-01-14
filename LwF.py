@@ -7,7 +7,7 @@ from myNetwork import network
 from iCIFAR100 import iCIFAR100
 from torch.utils.data import DataLoader
 
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def get_one_hot(target,num_class):
     one_hot=torch.zeros(target.shape[0],num_class).to(device)
@@ -24,49 +24,27 @@ class LwFmodel:
         self.class_mean_set = []
         self.numclass = numclass
         self.task_size=task_size
-        self.transform = transforms.Compose([#transforms.Resize(img_size),
-                                             transforms.ToTensor(),
-                                            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))])
         self.old_model = None
-
-        self.train_transform = transforms.Compose([#transforms.Resize(img_size),
-                                                  transforms.RandomCrop((32,32),padding=4),
-                                                  transforms.RandomHorizontalFlip(p=0.5),
-                                                  transforms.ColorJitter(brightness=0.24705882352941178),
-                                                  transforms.ToTensor(),
-                                                  transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))])
-        
-        self.test_transform = transforms.Compose([#transforms.Resize(img_size),
-                                                   transforms.ToTensor(),
-                                                 transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))])
-        
-        self.train_dataset = iCIFAR100('../dataset', transform=self.train_transform, download=True)
-        self.test_dataset = iCIFAR100('../dataset', test_transform=self.test_transform, train=False, download=True)
 
         self.batchsize = batch_size
 
-        self.train_loader=None
-        self.test_loader=None
-
     # get incremental train data
     # incremental
-    def beforeTrain(self):
+    def beforeTrain(self, Dataset):
         self.model.eval()
-        classes=[self.numclass-self.task_size,self.numclass]
-        self.train_loader,self.test_loader=self._get_train_and_test_dataloader(classes)
+        self.train_loader,self.test_loader=self._get_train_and_test_dataloader(Dataset)
         if self.numclass>self.task_size:
             self.model.Incremental_learning(self.numclass)
         self.model.train()
         self.model.to(device)
 
-    def _get_train_and_test_dataloader(self, classes):
-        self.train_dataset.getTrainData(classes, self.exemplar_set)
-        self.test_dataset.getTestData(classes)
-        train_loader = DataLoader(dataset=self.train_dataset,
+    def _get_train_and_test_dataloader(self, Dataset):
+
+        train_loader = DataLoader(dataset=Dataset['train'],
                                   shuffle=True,
                                   batch_size=self.batchsize)
 
-        test_loader = DataLoader(dataset=self.test_dataset,
+        test_loader = DataLoader(dataset=Dataset['val'],
                                  shuffle=True,
                                  batch_size=self.batchsize)
 
@@ -89,7 +67,7 @@ class LwFmodel:
             elif epoch == 85:
                 opt = optim.SGD(self.model.parameters(), lr=self.learning_rate /125,momentum=0.9,nesterov=True, weight_decay=0.00001)
                 print("change learning rate%.5f" % (self.learning_rate / 125))
-            for step, (indexs, images, target) in enumerate(self.train_loader):
+            for step, (images, target) in enumerate(self.train_loader):
                 images, target = images.to(device), target.to(device)
                 opt.zero_grad()
                 loss=self._compute_loss(images,target)
