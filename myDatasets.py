@@ -174,9 +174,18 @@ class FashionMNIST(datasets.FashionMNIST):
 class ConcatDataset(torch.utils.data.Dataset):
     def __init__(self, *datasets):
         self.datasets = datasets
+        self.lengths = [len(d) for d in datasets]
+        self.length = sum(self.lengths)
 
-    def __getitem__(self, i):
-        return tuple(d[i] for d in self.datasets)
+        self.data = []
+        self.targets = []
+        for dataset in self.datasets:
+            self.data.extend(dataset.data)
+            self.targets.extend(dataset.targets)
+
+    def __getitem__(self, index):
+        img, target = self.data[index], int(self.targets[index])
+        return img, target
 
     def __len__(self):
-        return min(len(d) for d in self.datasets)
+        return self.length
