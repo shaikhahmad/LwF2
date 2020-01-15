@@ -181,11 +181,14 @@ class ConcatDataset(torch.utils.data.Dataset):
         self.data = []
         self.targets = []
         for dataset in datasets:
-            for x in range(dataset.data.shape[0]):
-                self.data.append(dataset.data[x])
+            for d in range(dataset.data):
+                self.data.append(d)
             try:
-                self.targets.append(dataset.targets[x])
-            except: self.targets.append(dataset.labels[x])
+                for t in dataset.targets:
+                    self.targets.append(t)
+            except:
+                for t in dataset.labels:
+                    self.targets.append(t)
 
         self.data = np.array(self.data)
         self.targets = np.array(self.targets)
