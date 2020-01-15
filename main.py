@@ -37,7 +37,7 @@ svhn = {x: datasets.SVHN(root='SVHN', split=x if x == 'train' else 'test',
 svhn_loader = {x: torch.utils.data.DataLoader(svhn[x], batch_size=batch_size,
                                                shuffle=True, num_workers=4)
                 for x in ['train', 'val']}
-jointdata  = {x: myDatasets.ConcatDataset([svhn[x]]) for x in ['train', 'val']}
+jointdata  = {x: myDatasets.ConcatDataset(svhn[x]) for x in ['train', 'val']}
 
 for i in range(4):
     model.beforeTrain(svhn)

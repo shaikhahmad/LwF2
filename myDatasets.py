@@ -173,15 +173,17 @@ class FashionMNIST(datasets.FashionMNIST):
 
 class ConcatDataset(torch.utils.data.Dataset):
     def __init__(self, *datasets):
-        self.datasets = datasets
+        # self.datasets = datasets
         self.lengths = [len(d) for d in datasets]
         self.length = sum(self.lengths)
 
         self.data = []
         self.targets = []
-        for dataset in self.datasets:
+        for dataset in datasets:
             self.data.extend(dataset.data)
-            self.targets.extend(dataset.targets)
+            try:
+                self.targets.extend(dataset.targets)
+            except: self.targets.extend(dataset.labels)
 
     def __getitem__(self, index):
         img, target = self.data[index], int(self.targets[index])
