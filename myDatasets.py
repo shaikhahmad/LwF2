@@ -181,7 +181,7 @@ class ConcatDataset(torch.utils.data.Dataset):
         self.data = []
         self.targets = []
         for dataset in datasets:
-            for d in range(dataset.data):
+            for d in dataset.data:
                 self.data.append(d)
             try:
                 for t in dataset.targets:
