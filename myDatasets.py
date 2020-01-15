@@ -2,6 +2,7 @@ import torch
 from torchvision import datasets
 import os
 from PIL import Image
+import numpy as np
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
@@ -180,10 +181,14 @@ class ConcatDataset(torch.utils.data.Dataset):
         self.data = []
         self.targets = []
         for dataset in datasets:
-            self.data.extend(dataset.data)
+            for x in range(dataset.data.shape[0]):
+                self.data.append(dataset.data[x])
             try:
-                self.targets.extend(dataset.targets)
-            except: self.targets.extend(dataset.labels)
+                self.targets.append(dataset.targets[x])
+            except: self.targets.append(dataset.labels[x])
+
+        self.data = np.array(self.data)
+        self.targets = np.array(self.targets)
 
     def __getitem__(self, index):
         img, target = self.data[index], int(self.targets[index])
