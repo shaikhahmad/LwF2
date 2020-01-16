@@ -1,17 +1,14 @@
 from LwF import LwFmodel
 from ResNet import resnet18_cbam
-parser=4
-numclass= 10 #int(40/parser)
-task_size=int(40/parser)
+parser=2
+numclass=int(10/parser)
+task_size=int(10/parser)
 feature_extractor=resnet18_cbam()
 img_size=32
-batch_size=200
-task_size=int(40/parser)
+batch_size=128
 memory_size=2000
-epochs=2
-learning_rate=2.0
-
-model=LwFmodel(numclass,feature_extractor,batch_size,epochs,learning_rate,task_size)
+epochs=100
+learning_rate=0.01
 
 import torch
 from torchvision import datasets, transforms
@@ -39,7 +36,9 @@ svhn_loader = {x: torch.utils.data.DataLoader(svhn[x], batch_size=batch_size,
                 for x in ['train', 'val']}
 jointdata  = {x: myDatasets.ConcatDataset(svhn[x]) for x in ['train', 'val']}
 
-for i in range(4):
-    model.beforeTrain(svhn)
-    accuracy=model.train(svhn_loader)
+model=LwFmodel(jointdata, numclass,feature_extractor,batch_size,epochs,learning_rate,task_size)
+
+for i in range(parser):
+    model.beforeTrain()
+    accuracy=model.train()
     model.afterTrain(accuracy)
