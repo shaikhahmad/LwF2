@@ -62,10 +62,10 @@ class LwFmodel:
         self.model.to(device)
 
     def _get_train_and_test_dataloader(self, classes):
-        # self.train_dataset.getTrainData(classes, self.exemplar_set)
-        # self.test_dataset.getTestData(classes)
-        train_idx = [x for x in self.train_dataset.targets if x in range(classes[0], classes[1])]
-        test_idx = [x for x in self.test_dataset.targets if x in range(classes[0], classes[1])]
+        # train_idx = [x for x in self.train_dataset.targets if x in range(classes[0], classes[1])]
+        # test_idx = [x for x in self.test_dataset.targets if x in range(classes[0], classes[1])]
+        train_idx = (self.train_dataset.targets >= classes[0]) * (self.train_dataset.targets < classes[1])
+        test_idx = (self.test_dataset.targets >= classes[0]) * (self.test_dataset.targets < classes[1])
         train_sample = torch.utils.data.Subset(self.train_dataset, train_idx)
         test_sample = torch.utils.data.Subset(self.test_dataset, test_idx)
         train_loader = DataLoader(dataset=train_sample,
