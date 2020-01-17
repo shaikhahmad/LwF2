@@ -129,7 +129,7 @@ class LwFmodel:
 
     def _compute_loss(self, imgs, target):
         output = self.model(imgs)
-        # target = get_one_hot(target, self.numclass)
+        target = get_one_hot(target, self.numclass)
         output, target = output.to(device), target.to(device)
         if self.old_model == None:
             return F.binary_cross_entropy_with_logits(output, target)
