@@ -182,8 +182,9 @@ class ConcatDataset(torch.utils.data.Dataset):
         self.data = torch.Tensor([])
         self.targets = []
         for dataset in datasets:
-            for i in range(len(dataset)):
-                self.data = torch.cat((self.data, dataset[i][0]), 0)
+            self.data = torch.cat((self.data, dataset[:][0]), 0)
+            # for i in range(len(dataset)):
+            #     self.data = torch.cat((self.data, dataset[i][0]), 0)
                 # self.data.append(dataset[i][0])
             try:
                 for t in dataset.targets:
