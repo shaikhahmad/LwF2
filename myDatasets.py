@@ -190,8 +190,8 @@ class ConcatDataset(torch.utils.data.Dataset):
                 for t in dataset.labels:
                     self.targets.append(t)
 
-        self.data = torch.Tensor(np.array(self.data))
-        self.targets = torch.Tensor(np.array(self.targets))
+        self.data = torch.from_numpy(np.array(self.data))
+        self.targets = torch.from_numpy(np.array(self.targets))
 
     def __getitem__(self, index):
         img, target = self.data[index], int(self.targets[index])
