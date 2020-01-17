@@ -95,6 +95,8 @@ class iCIFAR100(CIFAR100):
             return len(self.TrainData)
         elif self.TestData!=[]:
             return len(self.TestData)
+        else :
+            return len(self.data)
 
     def get_image_class(self,label):
         return self.data[np.array(self.targets)==label]
