@@ -179,11 +179,12 @@ class ConcatDataset(torch.utils.data.Dataset):
         self.length = sum(self.lengths)
         shape = datasets[0].data[0].shape
 
-        self.data = []
+        self.data = torch.Tensor([])
         self.targets = []
         for dataset in datasets:
             for i in range(len(dataset)):
-                self.data.append(dataset[i][0])
+                self.data = torch.cat((self.data, dataset[i][0]), 0)
+                # self.data.append(dataset[i][0])
             try:
                 for t in dataset.targets:
                     self.targets.append(t)
@@ -191,7 +192,7 @@ class ConcatDataset(torch.utils.data.Dataset):
                 for t in dataset.labels:
                     self.targets.append(t)
 
-        self.data = torch.Tensor(self.data) # np.array(self.data)
+        # self.data = torch.Tensor(self.data) # np.array(self.data)
         self.targets = np.array(self.targets)
 
         # self.data = torch.from_numpy(self.data)
