@@ -193,6 +193,8 @@ class ConcatDataset(torch.utils.data.Dataset):
         self.data = np.array(self.data)
         self.targets = np.array(self.targets)
 
+        self.data = torch.Tensor(self.data)
+
     def __getitem__(self, index):
         img, target = self.data[index], int(self.targets[index])
         return img, target
