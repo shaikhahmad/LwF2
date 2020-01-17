@@ -106,7 +106,7 @@ class LwFmodel:
                 opt.zero_grad()
                 loss.backward()
                 opt.step()
-                print('epoch:%d,step:%d,loss:%.3f' % (epoch, step, loss.item()))
+                # print('epoch:%d,step:%d,loss:%.3f' % (epoch, step, loss.item()))
             accuracy = self._test(self.test_loader)
             print('epoch:%d,accuracy:%.5f' % (epoch, accuracy))
         return accuracy
