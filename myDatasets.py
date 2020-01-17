@@ -191,7 +191,7 @@ class ConcatDataset(torch.utils.data.Dataset):
                 for t in dataset.labels:
                     self.targets.append(t)
 
-        self.data = np.array(self.data)
+        self.data = torch.Tensor(self.data) # np.array(self.data)
         self.targets = np.array(self.targets)
 
         # self.data = torch.from_numpy(self.data)
