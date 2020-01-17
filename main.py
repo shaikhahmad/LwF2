@@ -1,6 +1,6 @@
 from LwF import LwFmodel
 from ResNet import resnet18_cbam
-parser=2
+parser=5
 numclass=int(10/parser)
 task_size=int(10/parser)
 feature_extractor=resnet18_cbam()

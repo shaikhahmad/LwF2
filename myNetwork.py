@@ -22,5 +22,5 @@ class network(nn.Module):
         self.fc.weight.data[:out_feature] = weight
         self.fc.bias.data[:out_feature] = bias
 
-    def feature_extractor(self,inputs):
+    def feature_extractor(self, inputs):
         return self.feature(inputs)
