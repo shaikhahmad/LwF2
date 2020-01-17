@@ -66,8 +66,8 @@ class LwFmodel:
         # test_idx = [x for x in self.test_dataset.targets if x in range(classes[0], classes[1])]
         # train_idx = (self.train_dataset.targets >= classes[0]) * (self.train_dataset.targets < classes[1])
         # test_idx = (self.test_dataset.targets >= classes[0]) * (self.test_dataset.targets < classes[1])
-        train_idx = [x for x in range(len(self.train_dataset.targets)) if self.train_dataset.targets[x] in range(classes[0], classes[1])]
-        test_idx = [x for x in range(len(self.test_dataset.targets)) if self.test_dataset.targets[x] in range(classes[0], classes[1])]
+        train_idx = [x for x in range(len(self.train_dataset)) if self.train_dataset[x][1] in range(classes[0], classes[1])]
+        test_idx = [x for x in range(len(self.test_dataset)) if self.test_dataset[x][1] in range(classes[0], classes[1])]
         train_sample = torch.utils.data.Subset(self.train_dataset, train_idx)
         test_sample = torch.utils.data.Subset(self.test_dataset, test_idx)
         train_loader = DataLoader(dataset=train_sample,
