@@ -116,6 +116,34 @@ class CIFAR10(datasets.CIFAR10):
 
         return img, target
 
+class SVHN(datasets.SVHN):
+    def __init__(self, root, extend=0, *args, **kwargs):
+        self.extend = extend
+        super().__init__(root, *args, **kwargs)
+        self.labels = [x+extend for x in self.labels]
+
+    def __getitem__(self, index):
+        """
+        Args:
+            index (int): Index
+
+        Returns:
+            tuple: (image, target) where target is index of the target class.
+        """
+        img, target = self.data[index], self.labels[index]
+
+        # doing this so that it is consistent with all other datasets
+        # to return a PIL Image
+        img = Image.fromarray(np.transpose(img, (1, 2, 0)))
+
+        if self.transform is not None:
+            img = self.transform(img)
+
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return img, target
+
 class MNIST(datasets.MNIST):
     def __init__(self, root, extend=0, *args, **kwargs):
         self.extend = extend
