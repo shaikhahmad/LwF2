@@ -5,9 +5,9 @@ numclass=int(10/parser)
 task_size=int(10/parser)
 feature_extractor=resnet18_cbam()
 img_size=32
-batch_size=128
+batch_size=200
 memory_size=2000
-epochs=100
+epochs=1
 learning_rate=0.01
 
 import torch
