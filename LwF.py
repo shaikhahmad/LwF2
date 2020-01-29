@@ -98,7 +98,7 @@ class LwFmodel:
                 opt = optim.SGD(self.model.parameters(), lr=self.learning_rate / 125, momentum=0.9, nesterov=True,
                                 weight_decay=0.00001)
                 print("change learning rate%.5f" % (self.learning_rate / 125))
-            for step, (images, target) in enumerate(tqdm(self.train_loader)):
+            for step, (images, target) in enumerate(self.train_loader):
                 images = images.float()
                 images, target = images.to(device), target.to(device)
                 opt.zero_grad()
